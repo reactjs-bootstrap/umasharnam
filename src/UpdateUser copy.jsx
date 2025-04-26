@@ -1,8 +1,9 @@
 import axios from "axios";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
-const CreateUsers = () => {
+const UpdateUsers = () => {
+  const { id } = useParams();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [age, setAge] = useState("");
@@ -11,17 +12,29 @@ const CreateUsers = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:7000/", { name, email, age })
-      .then(() => {
-        navigate("/");
+      .put("http://localhost:4000/updateuser/" + id, { name, email, age })
+      .then((result) => {
+        console.log(result), navigate("/");
       })
       .catch((err) => console.log(err));
   };
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/getuser/" + id)
+      .then((result) => {
+        // console.log(result),
+        setName(result.data.name),
+          setEmail(result.data.email),
+          setAge(result.data.age);
+      })
+      .catch((err) => console.log(err));
+  }, []);
   return (
     <div className="d-flex vh-100 bg-primary justify-content-center align-items-center">
       <div className="w-50 bg-white rounded p-3">
         <form onSubmit={handleSubmit}>
-          <h2>Add User</h2>
+          <h2>Update User</h2>
           <div className="mb-2">
             <label htmlFor="">Name</label>
             <input
@@ -52,7 +65,7 @@ const CreateUsers = () => {
               onChange={(e) => setAge(e.target.value)}
             />
           </div>
-          <button className="btn btn-success">Submit</button>
+          <button className="btn btn-success">Update</button>
           <button className="btn btn-success ms-2">Reset</button>
           <Link to="/">
             <button className="btn btn-success ms-2">Home</button>
@@ -63,4 +76,4 @@ const CreateUsers = () => {
   );
 };
 
-export default CreateUsers;
+export default UpdateUsers;

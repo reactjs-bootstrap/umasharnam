@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const CreateUsers = () => {
   const [name, setName] = useState("");
@@ -11,12 +11,13 @@ const CreateUsers = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:7000/", { name, email, age })
-      .then(() => {
-        navigate("/");
+      .post("http://localhost:4000/create", { name, email, age })
+      .then((result) => {
+        console.log(result), navigate("/");
       })
       .catch((err) => console.log(err));
   };
+
   return (
     <div className="d-flex vh-100 bg-primary justify-content-center align-items-center">
       <div className="w-50 bg-white rounded p-3">
@@ -28,7 +29,6 @@ const CreateUsers = () => {
               type="text"
               placeholder="Enter Name"
               className="form-control"
-              value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
@@ -38,7 +38,6 @@ const CreateUsers = () => {
               type="email"
               placeholder="Enter Email"
               className="form-control"
-              value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
@@ -48,7 +47,6 @@ const CreateUsers = () => {
               type="text"
               placeholder="Enter Age"
               className="form-control"
-              value={age}
               onChange={(e) => setAge(e.target.value)}
             />
           </div>
